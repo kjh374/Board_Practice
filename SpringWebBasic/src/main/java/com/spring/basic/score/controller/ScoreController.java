@@ -72,7 +72,7 @@ public class ScoreController {
 	//4. 성적 정보 삭제 요청
 	@GetMapping("/remove")
 	public String remove(int stuNum) {
-		System.out.println("/score/remove: GET!");
+		System.out.println("/score/remove: GET!: " + stuNum);
 		service.delete(stuNum);
 		return "redirect:/score/list";
 	}
