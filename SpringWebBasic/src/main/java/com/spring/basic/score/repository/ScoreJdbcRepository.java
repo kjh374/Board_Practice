@@ -149,8 +149,10 @@ public class ScoreJdbcRepository implements IScoreRepository {
 	public void deleteByStuNum(int stuNum) {
 		
 		String sql = "DELETE FROM score WHERE stu_num = ?";
+//		String sql = "DELETE FROM score WHERE stu_num = " + stuNum;
 		try {
 			conn = DriverManager.getConnection(url, username, password);
+//			conn.setAutoCommit(false); // 오토커밋 취소
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, stuNum);
 			pstmt.executeUpdate();
