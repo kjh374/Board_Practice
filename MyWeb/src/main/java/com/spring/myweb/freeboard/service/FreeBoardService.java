@@ -1,6 +1,6 @@
 package com.spring.myweb.freeboard.service;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.myweb.freeboard.dto.FreeContentResponseDTO;
 import com.spring.myweb.freeboard.dto.FreeListResponseDTO;
+import com.spring.myweb.freeboard.dto.FreeModifyRequestDTO;
 import com.spring.myweb.freeboard.dto.FreeRegistRequestDTO;
 import com.spring.myweb.freeboard.entity.FreeBoard;
 import com.spring.myweb.freeboard.mapper.IFreeBoardMapper;
@@ -46,9 +47,11 @@ public class FreeBoardService implements IFreeBoardService {
 	}
 
 	@Override
-	public void update(FreeBoard freeBoard) {
-		// TODO Auto-generated method stub
-
+	public void update(FreeModifyRequestDTO dto) {
+		mapper.update(FreeBoard.builder()
+				.bno(dto.getBno()).title(dto.getTitle()).content(dto.getContent())
+				.build());
+		
 	}
 
 	@Override

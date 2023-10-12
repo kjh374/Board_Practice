@@ -90,25 +90,51 @@ public class FreeBoardControllerTest {
 		ModelAndView mv =
 		mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/content")
 												.param("bno", "3")
-												).andReturn().getModelAndView();
+						).andReturn().getModelAndView();
+		
 		FreeContentResponseDTO dto = (FreeContentResponseDTO) mv.getModelMap().get("board");
-		System.out.println();
-//		assertNull(mv.getModelMap());
-		System.out.println(mv.getViewName());
-		assertEquals(mv.getViewName(), "/views/freeDetail");
+		assertEquals(mv.getViewName(), "freeboard/freeDetail");
+		System.out.println(dto);
 		assertEquals(dto.getBno(), 3);
 										
 	}
 	
 	@Test
-	@DisplayName("4번 글 삭제 요청을 넣으면 4번 글 null")
-	public void testDelete() throws Exception {
-		ModelAndView mv = mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/delete")
-												.param("bno", "2")
-												).andReturn().getModelAndView();
-		assertNull(mapper.getContent(2));
-//		assertEquals(mv.getViewName(), "redirect:/freeboard/freeList");
-	}
+    @DisplayName("3번글의 제목과 내용을 수정하는 요청을 post방식으로 전송하면 수정이 진행되고, "
+            + "수정된 글의 상세보기 페이지로 응답해야 한다.")
+    // /freeboard/modify -> post
+    void testModify() throws Exception {
+		String bno = "5";
+        ModelAndView mv =
+		mockMvc.perform(MockMvcRequestBuilders.post("/freeboard/modify")
+											.param("bno", bno)
+											.param("title", bno + "번글 제목 수정")
+											.param("content", bno + "번글 내용 수정")
+						).andReturn().getModelAndView();
+        assertEquals(mv.getViewName(), "redirect:/freeboard/content?bno=" + bno);		
+    }
+    
+    @Test
+    @DisplayName("3번 글을 삭제하면 목록 재요청이 발생할 것이다.")
+    // /freeboard/delete -> post
+    void testDelete() throws Exception {
+    	String bno = "3";   	
+        
+        assertEquals(mockMvc.perform(MockMvcRequestBuilders.post("/freeboard/delete")
+    			.param("bno", bno)
+				).andReturn().getModelAndView().getViewName(), "redirect:/freeboard/freeList");
+    }
+    
+	
+//	@Test
+//	@DisplayName("4번 글 삭제 요청을 넣으면 4번 글 null")
+//	public void testDelete() throws Exception {
+//		ModelAndView mv = mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/delete")
+//												.param("bno", "2")
+//												).andReturn().getModelAndView();
+//		assertNull(mapper.getContent(2));
+////		assertEquals(mv.getViewName(), "redirect:/freeboard/freeList");
+//	}
 	
 	
 }
