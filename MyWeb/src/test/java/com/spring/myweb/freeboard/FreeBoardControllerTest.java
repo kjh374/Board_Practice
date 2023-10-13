@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.myweb.freeboard.controller.FreeBoardController;
-import com.spring.myweb.freeboard.dto.FreeContentResponseDTO;
+import com.spring.myweb.freeboard.dto.response.FreeContentResponseDTO;
 import com.spring.myweb.freeboard.mapper.IFreeBoardMapper;
 
 @ExtendWith(SpringExtension.class)
