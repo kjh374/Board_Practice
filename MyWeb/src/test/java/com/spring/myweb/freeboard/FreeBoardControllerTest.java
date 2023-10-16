@@ -92,7 +92,7 @@ public class FreeBoardControllerTest {
 												.param("bno", "3")
 						).andReturn().getModelAndView();
 		
-		FreeContentResponseDTO dto = (FreeContentResponseDTO) mv.getModelMap().get("board");
+		FreeContentResponseDTO dto = (FreeContentResponseDTO) mv.getModelMap().get("article");
 		assertEquals(mv.getViewName(), "freeboard/freeDetail");
 		System.out.println(dto);
 		assertEquals(dto.getBno(), 3);
