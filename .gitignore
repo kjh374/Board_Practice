@@ -3,7 +3,7 @@
 
 .DS_Store
 servers/
-
+properties/
 ### Eclipse ###
 .metadata
 bin/
