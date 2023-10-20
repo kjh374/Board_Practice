@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.spring.myweb.reply.dto.ReplyListResponseDTO;
 import com.spring.myweb.reply.dto.ReplyRegistDTO;
+import com.spring.myweb.reply.dto.ReplyUpdateRequestDTO;
 import com.spring.myweb.reply.entity.Reply;
 
 public interface IReplyService {
@@ -13,6 +14,6 @@ public interface IReplyService {
 	int getTotal(int bno); //댓글 개수 (페이징, PageCreator는 사용하지 않습니다.)
 	
 	String pwCheck(int rno); //비밀번호 확인
-	void update(Reply reply); //댓글 수정
-	void delete(int rno); //댓글 삭제
+	String update(ReplyUpdateRequestDTO dto); //댓글 수정
+	String delete(int rno, String replyPw); //댓글 삭제
 }
