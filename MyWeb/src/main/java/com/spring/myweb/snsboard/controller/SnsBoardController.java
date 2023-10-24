@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +28,13 @@ import com.spring.myweb.snsboard.dto.SnsBoardResponseDTO;
 import com.spring.myweb.snsboard.service.SnsBoardService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 
 @RestController
 @RequestMapping("/snsboard")
 @RequiredArgsConstructor
+@Slf4j
 public class SnsBoardController {
 	
 	private final SnsBoardService service;	
@@ -50,7 +56,8 @@ public class SnsBoardController {
 
 	@GetMapping("/{page}")
 	public List<SnsBoardResponseDTO> getList(@PathVariable int page) {
-		System.out.println("/snsboard/getList: GET!");
+//		System.out.println("/snsboard/getList: GET!");
+		log.info("/snsboard/getList: GET!");
 		return service.getList(page);
 	}
 	
@@ -63,8 +70,10 @@ public class SnsBoardController {
     */
 	@GetMapping("/display/{fileLoca}/{fileName}")
 	public ResponseEntity<?> getImage(@PathVariable String fileLoca, @PathVariable String fileName) {
-		System.out.println("fileLoca: " + fileLoca);
-		System.out.println("fileName: " + fileName);
+//		System.out.println("fileLoca: " + fileLoca);
+//		System.out.println("fileName: " + fileName);
+		log.info("fileLoca: " + fileLoca);
+		log.info("fileName: {}", fileName);
 		
 		File file = new File("C:/test/upload/" + fileLoca + "/" + fileName);
 		System.out.println(file.toString()); // 완성된 경로.
@@ -130,35 +139,38 @@ public class SnsBoardController {
 	}
 	
 	@GetMapping("/content/{bno}")
-	public SnsBoardResponseDTO getDetail(@PathVariable int bno){
-		return service.getDetail(bno);
+	public ResponseEntity<?> getDetail(@PathVariable int bno){
+		return ResponseEntity.ok().body(service.getDetail(bno));
+	}
+
+	@DeleteMapping("/{bno}")
+	public ResponseEntity<?> delete(@PathVariable int bno, HttpSession session) {
+		//글이 삭제되었다면 더 이상 이미지도 존재할 필요가 없으므로
+		//이미지도 함께 삭제해 주셔야 합니다.
+		//File 객체 생성 -> 생성자에 지우고자 하는 파일의 경로 지정
+		//메서드 delete() -> return type이 boolean. 삭제 성공 시 true, 실패 시 false.
+		String id = (String) session.getAttribute("login");
+		SnsBoardResponseDTO dto = service.getDetail(bno);
+		if(dto.getWriter().equals(id)) {
+			service.delete(bno);
+			File file = new File(dto.getUploadPath() + dto.getFileLoca() + "/" + dto.getFileName());
+			return file.delete() ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			
+		} else {
+			
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
+
 	}
 	
-//	@GetMapping("/content/{bno}")
-//	public Map<?, ?> getDetail(@PathVariable int bno){
-//		SnsBoardResponseDTO dto = service.getDetail(bno);
-//		File file = new File("C:/test/upload/" + dto.getFileLoca() + "/" + dto.getFileName());
-//        System.out.println(file.toString());
-//        System.out.println(dto.getFileLoca());
-//		
-//		HttpHeaders header = new HttpHeaders();
-//		header.add("Content-Disposition", "inline; fileName=" + dto.getFileName());
-//		ResponseEntity<byte[]> result = null;
-//		try {
-//			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			result = new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//		
-//		
-//		Map<String, Object> map = new HashMap<>();
-//		map.put("img", result);
-//		map.put("content", dto);
-//		
-//		return map;
-//		
-//	}
-
+	//좋아요 버튼 클릭 처리
+	@PostMapping("/like")
+	public String likeConfirm(@RequestBody Map<String, String> params) {
+		log.info("/like: POST, params: {}", params);
+		return service.searchLike(params);
+		
+		
+	}
 	
 }

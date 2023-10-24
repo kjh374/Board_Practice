@@ -48,4 +48,5 @@ public class SnsBoard {
 	private String content;
 	private LocalDateTime regDate;
 	
+	private int likeCnt;
 }

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -100,9 +101,22 @@ public class SnsBoardService {
 	}
 
 	public SnsBoardResponseDTO getDetail(int bno) {
-		System.out.println("snsboard" + mapper.getDetail(bno));
 		return new SnsBoardResponseDTO(mapper.getDetail(bno));
 		
+	}
+
+	public void delete(int bno) {
+			mapper.delete(bno);
+	}
+
+	public String searchLike(Map<String, String> params) {
+		if(mapper.searchLike(params) == 0) {
+			mapper.createLike(params);
+			return "like";
+		}else {
+			mapper.deleteLike(params);
+			return "delete";
+		}
 	}
 	
 
