@@ -20,6 +20,9 @@ public class SnsBoardResponseDTO {
 	private String content;
 	private String regDate;
 	
+	//좋아요 개수가 몇 개인지를 알려주는 변수 추가.
+	private int likeCnt;
+	
 	public SnsBoardResponseDTO(SnsBoard board) {
 		this.bno = board.getBno();
 		this.writer = board.getWriter();
@@ -28,6 +31,7 @@ public class SnsBoardResponseDTO {
 		this.fileName = board.getFileName();
 		this.content = board.getContent();
 		this.regDate = makePrettierDateString(board.getRegDate()); 
+		this.likeCnt = board.getLikeCnt();
 	}
 	
     String makePrettierDateString(LocalDateTime regDate) {
