@@ -405,7 +405,6 @@
 				console.log(list);
 				console.log(list.length);
 				if(list.length <= 0) {
-					isFinish = true;
 					reqStatus = true;
 					return;
 				}
