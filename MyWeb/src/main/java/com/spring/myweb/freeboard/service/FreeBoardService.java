@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.myweb.freeboard.dto.page.Page;
@@ -21,13 +22,15 @@ import lombok.RequiredArgsConstructor;
 public class FreeBoardService implements IFreeBoardService {
 
 	private final IFreeBoardMapper mapper;
+	private final BCryptPasswordEncoder encoder;
 	
 	@Override
 	public void regist(FreeRegistRequestDTO dto) {
 		mapper.regist(FreeBoard.builder()
 								.title(dto.getTitle())
-								.content(dto.getContent())
 								.writer(dto.getWriter())
+								.content(dto.getContent())
+								.password(encoder.encode(dto.getPassword()))
 								.build());
 	}
 
@@ -55,7 +58,7 @@ public class FreeBoardService implements IFreeBoardService {
 	@Override
 	public void update(FreeModifyRequestDTO dto) {
 		mapper.update(FreeBoard.builder()
-				.bno(dto.getBno()).title(dto.getTitle()).content(dto.getContent())
+				.bno(dto.getBno()).title(dto.getTitle()).writer(dto.getWriter()).content(dto.getContent())
 				.build());
 		
 	}
@@ -63,6 +66,14 @@ public class FreeBoardService implements IFreeBoardService {
 	@Override
 	public void delete(int bno) {
 		mapper.delete(bno);
+	}
+
+	@Override
+	public boolean authenticate(FreeModifyRequestDTO dto) {
+		if(encoder.matches(dto.getPassword(), mapper.getPassword(dto.getBno()))) {
+			return true;
+		}
+		return false;
 	}
 
 }

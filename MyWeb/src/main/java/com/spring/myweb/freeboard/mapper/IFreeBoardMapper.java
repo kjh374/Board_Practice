@@ -24,4 +24,7 @@ public interface IFreeBoardMapper {
 	
 	//삭제
 	void delete(int bno);
+
+	//비밀번호 조회
+	String getPassword(int bno);
 }

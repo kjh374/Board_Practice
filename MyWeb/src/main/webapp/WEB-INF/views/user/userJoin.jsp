@@ -114,7 +114,7 @@
             const userId = document.getElementById('userId').value;
             console.log("userId: " + userId);
             if(userId === ''){
-                alert('아이디는 필수값입니다.');
+                alert('아이디는 필수 입력값입니다.');
                 return;
             }
 
@@ -296,7 +296,7 @@
                 return;
             }
             if(document.getElementById('userName').value === '') {
-                alert('이름은 필수값입니다.');
+                alert('이름은 필수 입력값입니다.');
                 return;
             }
             if(!document.getElementById('mail-check-btn').disabled){

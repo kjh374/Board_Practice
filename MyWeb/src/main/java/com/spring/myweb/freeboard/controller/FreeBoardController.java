@@ -14,6 +14,7 @@ import com.spring.myweb.freeboard.dto.request.FreeRegistRequestDTO;
 import com.spring.myweb.freeboard.service.IFreeBoardService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
@@ -27,17 +28,8 @@ public class FreeBoardController {
 	@GetMapping("/freeList")
 	public void freeList(Page page, Model model) {
 		System.out.println("/freeboard/freeList: GET!");
-		PageCreator creator;
 		int totalCount = service.getTotal(page);
-		if(totalCount == 0) {
-			page.setKeyword(null);
-			page.setCondition(null);
-			creator = new PageCreator(page, service.getTotal(page));	
-			model.addAttribute("msg", "searchFail");
-		} else {
-			creator = new PageCreator(page, totalCount);
-		}
-		
+		PageCreator creator = new PageCreator(page, totalCount);
 		
 		model.addAttribute("boardList", service.getList(page));
 		model.addAttribute("pc", creator);
@@ -57,16 +49,23 @@ public class FreeBoardController {
 	
 	//글 상세보기 처리
 	@GetMapping("/content")
-	public String content(int bno, Model model, @ModelAttribute("p") Page page) {
+	public String content(boolean msg, int bno, Model model, @ModelAttribute("p") Page page) {
 //		System.out.println(service.getContent(bno));
 		model.addAttribute("article", service.getContent(bno));
+		System.out.println(msg + "1111111111111111111111111111111111111111");
+		
+		if(msg) model.addAttribute("msg", true);
 		return "freeboard/freeDetail";
 	}
 	
 	//글 수정 페이지 이동 요청
 	@PostMapping("/modPage")
-	public String modPage(@ModelAttribute("article") FreeModifyRequestDTO dto) {
-		return "freeboard/freeModify";
+	public String modPage(@ModelAttribute("article") FreeModifyRequestDTO dto, Model model) {
+		boolean pwCheck = service.authenticate(dto);
+		if(service.authenticate(dto)) {
+			return "freeboard/freeModify";			
+		}
+		return "redirect:/freeboard/content?msg=true&bno=" + dto.getBno();
 	}
 	
 	//글 수정 요청

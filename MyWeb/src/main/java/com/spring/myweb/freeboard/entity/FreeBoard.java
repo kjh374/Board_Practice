@@ -14,12 +14,11 @@ import lombok.ToString;
  
 CREATE TABLE freeboard(
     bno NUMBER PRIMARY KEY,
+    rn NUMBER,
     title VARCHAR2(300) NOT NULL,
-    writer VARCHAR2(50) NOT NULL,
     content VARCHAR2(3000),
     reg_date DATE DEFAULT sysdate,
     update_date DATE DEFAULT NULL
-
 );
 
 CREATE SEQUENCE freeboard_seq
@@ -28,6 +27,14 @@ CREATE SEQUENCE freeboard_seq
     MAXVALUE 1000
     NOCYCLE
     NOCACHE;
+    
+BEGIN 
+    FOR i IN 1..100
+    LOOP
+        INSERT INTO freeboard (bno, title)
+        VALUES (freeboard_seq.NEXTVAL, 'title' || freeboard_seq.NEXTVAL);
+    END LOOP;
+END;    
     
 */
 
@@ -39,9 +46,11 @@ CREATE SEQUENCE freeboard_seq
 public class FreeBoard {
 
 	private int bno;
+	private int rn;
 	private String title;
 	private String writer;
 	private String content;
+	private String password;
 	private LocalDateTime regDate;
 	private LocalDateTime updateDate;
 }

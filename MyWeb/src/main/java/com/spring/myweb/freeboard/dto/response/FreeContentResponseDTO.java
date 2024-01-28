@@ -1,6 +1,6 @@
 package com.spring.myweb.freeboard.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; 
 import java.time.format.DateTimeFormatter;
 
 import com.spring.myweb.freeboard.entity.FreeBoard;
@@ -18,6 +18,7 @@ import lombok.ToString;
 public class FreeContentResponseDTO {
 
 	private int bno;
+	private int rn;
 	private String title;
 	private String writer;
 	private String content;
@@ -27,6 +28,7 @@ public class FreeContentResponseDTO {
 	
 	public FreeContentResponseDTO(FreeBoard board) {
 		this.bno = board.getBno();
+		this.rn = board.getRn();
 		this.title = board.getTitle();
 		this.writer = board.getWriter();
 		this.content = board.getContent();

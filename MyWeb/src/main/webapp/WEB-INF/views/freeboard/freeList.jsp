@@ -3,7 +3,32 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
     
     <%@ include file="../include/header.jsp" %>
-    
+   
+<html>
+	<head>
+	<style type="text/css">
+ 		.board-title {
+ 			width: 70%;
+ 		}
+
+        .table-bordered {
+            overflow: hidden;
+            white-space:nowrap;
+            text-overflow: ellipsis;       
+        }
+ 		
+ 		.table-bordered>thead>tr>th {
+			background-color: #E7F2F9;
+			color: #003366;
+			text-align: center;
+		}
+		
+		tbody>tr>td:first-child, tbody>tr>td:nth-child(3), tbody>tr>td:last-child {
+			text-align: center;
+		}
+ 	</style> 
+	</head>
+</html>
     
     <section>
         <div class="container-fluid">
@@ -16,14 +41,15 @@
                     <hr>
                     
                     <!--form select를 가져온다 -->
-            <form action="${pageContext.request.contextPath}/freeboard/freeList">
+            <form action="${pageContext.request.contextPath}/freeboard/freeList" name="searchForm">
 		    		<div class="search-wrap">
-                       <button type="submit" class="btn btn-info search-btn">검색</button>
-                       <input type="text" name="keyword" class="form-control search-input" value="${pc.page.keyword}">
+                        <span><a href="${pageContext.request.contextPath}/freeboard/freeList">Home</a><c:if test="${pc.page.keyword != null}"> > 총 ${pc.articleTotalCount} 건의 검색결과가 있습니다.</c:if> </span>
+                       <button type="button" class="btn btn-info search-btn" id="search">검색</button>
+                       <input type="text" name="keyword" id="keyword" class="form-control search-input" value="${pc.page.keyword}">
                        <select name="condition" class="form-control search-select">
                             <option value="title" ${pc.page.condition == 'title' ? 'selected' : ''}>제목</option>
+                            <option value="writer" ${pc.page.condition == 'writer' ? 'selected' : ''}>글쓴이</option>
                             <option value="content" ${pc.page.condition == 'content' ? 'selected' : ''}>내용</option>
-                            <option value="writer" ${pc.page.condition == 'writer' ? 'selected' : ''}>작성자</option>
                             <option value="titleContent" ${pc.page.condition == 'titleContent' ? 'selected' : ''}>제목+내용</option>
                        </select>
                     </div>
@@ -34,16 +60,16 @@
                             <tr>
                                 <th>번호</th>
                                 <th class="board-title">제목</th>
-                                <th>작성자</th>
+                                <th>글쓴이</th>
                                 <th>등록일</th>
                             </tr>
                         </thead>
                         <tbody>
                         	<c:forEach var="vo" items="${boardList}">
 	                            <tr>
-	                                <td>${vo.bno}</td>
-	                                <td><a href="${pageContext.request.contextPath}/freeboard/content?bno=${vo.bno}&pageNo=${pc.page.pageNo}&amount=${pc.page.amount}&keyword=${pc.page.keyword}&condition=${pc.page.condition}">${vo.title}</a></td>
-	                                <td>${vo.writer}</td>
+	                                <td>${vo.rn}</td>
+	                                <td><a href="${pageContext.request.contextPath}/freeboard/content?bno=${vo.bno}&pageNo=${pc.page.pageNo}&amount=${pc.page.amount}&keyword=${pc.page.keyword}&condition=${pc.page.condition}"><c:out value="${vo.title}"></c:out></a></td>
+	                                <td><c:out value="${vo.writer}"></c:out></td>
 	                                <td>${vo.date}</td>
 	                            </tr>
                             </c:forEach>
@@ -58,15 +84,17 @@
                     <hr>
                     <ul id="pagination" class="pagination pagination-sm">
                     	<c:if test="${pc.prev}">                    	
+                        	<li><a href="#" data-pagenum="${pc.first}">처음</a></li>
                         	<li><a href="#" data-pagenum="${pc.begin-1}">이전</a></li>
                     	</c:if>
                    		
                    		<c:forEach var="num" begin="${pc.begin}" end="${pc.end}">
                         	<li class="${pc.page.pageNo == num ? 'active' : ''}"><a href="#" data-pagenum="${num}">${num}</a></li>
                         </c:forEach>
-                        
+
                         <c:if test="${pc.next}">
 	                        <li><a href="#" data-pagenum="${pc.end+1}">다음</a></li>
+	                        <li><a href="#" data-pagenum="${pc.last}">끝</a></li>
                         </c:if>
                     </ul>
                     <button type="button" class="btn btn-info" onclick="location.href='${pageContext.request.contextPath}/freeboard/freeRegist'">글쓰기</button>
@@ -113,11 +141,15 @@
 
             });
 
-            const msg = '${msg}';
-            if(msg === 'searchFail'){
-                alert('검색 결과가 없었습니다.');
+            //검색 유효성 검사
+            document.getElementById('search').onclick = () => {
+                if(document.getElementById('keyword').value === ''){
+                    alert('검색어를 입력해주세요.');
+                    document.getElementById('keyword').focus();
+                    return;
+                }
+                document.searchForm.submit();
             }
-
 
         }
     </script>

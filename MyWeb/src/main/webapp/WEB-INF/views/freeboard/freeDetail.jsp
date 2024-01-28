@@ -1,7 +1,28 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 	<%@ include file="../include/header.jsp" %>
+	
+<html>
+    <head>
+        <style type="text/css">
+            textarea {
+                resize: none;
+                overflow: hidden;
+            }
+
+            textarea#title, textarea#writer, textarea#content {
+                background-color: #f1eeff;
+            }
+            
+            .form-pw {
+                width: 378px;
+            }
+        </style>
+    </head>
+</html>
+	
 
     <section>
         <div class="container">
@@ -11,30 +32,32 @@
                             <p>상세보기</p>
                         </div>
                         
-                        <form action="${pageContext.request.contextPath}/freeboard/modPage" method="post">
+                        <form action="${pageContext.request.contextPath}/freeboard/modPage" method="post" name="modForm">
                             <div>
                                 <label>DATE</label>
                                 <p>${article.date}</p>
                             </div>   
-                            <div class="form-group">
-                                <label>번호</label>
+                            <div class="form-group" style="display: none;">
                                 <input class="form-control" name='bno' value="${article.bno}" readonly>
                             </div>
                             <div class="form-group">
-                                <label>작성자</label>
-                                <input class="form-control" name='writer' value="${article.writer}" readonly>
-                            </div>    
-                            <div class="form-group">
                                 <label>제목</label>
-                                <input class="form-control" name='title' value="${article.title}" readonly>
+                                <textarea class="form-control" name='title' id="title" value="${article.title}" readonly><c:out value="${article.title}"></c:out></textarea>
                             </div>
-
+                            <div class="form-group">
+                                <label>글쓴이</label>
+                                <textarea class="form-control" rows="1" name='writer' id="writer" readonly><c:out value="${article.writer}" /></textarea>
+                            </div>
                             <div class="form-group">
                                 <label>내용</label>
-                                <textarea class="form-control" rows="10" name='content' readonly>${article.content}</textarea>
+                                <textarea class="form-control" rows="10" name='content' id="content" readonly><c:out value="${article.content}" /></textarea>
                             </div>
-
-                            <button type="submit" class="btn btn-primary">변경</button>
+                            <div class="form-group">
+                                <label>비밀번호</label>
+                                <input type="password" class="form-control form-pw" name='password' id="password" placeholder="패스워드를 입력해주세요."/>
+                                <span>&nbsp;&nbsp;영문, 숫자, 특수문자를 모두 포함하여 6 ~ 12자를 입력해주세요.</span>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="modify">변경</button>
                             <button type="button" class="btn btn-dark" onclick="location.href='${pageContext.request.contextPath}/freeboard/freeList?pageNo=${p.pageNo}&amount=${p.amount}&keyword=${p.keyword}&condition=${p.condition}'">목록</button>
                     </form>
                 </div>
@@ -119,8 +142,119 @@
 	<%@ include file="../include/footer.jsp" %>
 	
     <script>
+        
+        const $title = document.getElementById('title');
+        $title.style.height = '1px';
+        $title.style.height = (12 + $title.scrollHeight) + 'px';
+
+        const $writer = document.getElementById('writer');
+        $writer.style.height = '1px';
+        $writer.style.height = (12 + $writer.scrollHeight) + 'px';
+
+        const $content = document.getElementById('content');
+        $content.style.height = '1px';
+        $content.style.height = (12 + $content.scrollHeight) + 'px';
 
         window.onload = function(){
+            
+
+        	if('${msg}'){
+        		alert('비밀번호가 일치하지 않습니다.')
+                document.getElementById('password').focus();
+        	}
+            
+            function resize(obj) {
+                obj.style.height = '1px';
+                obj.style.height = (12 + obj.scrollHeight) + 'px';
+            }
+        //   var englishPattern = /[A-Za-z]/gi;
+        //   var specialPattern = /[`~!@#$%^&*|\\\'\";:\/?-]/gi;
+        //   var numberPattern = /[0-9]/gi;
+        //   var blankPattern = /^\s/;
+        //   var anyBlank = /\s/gi;
+        	
+        //     document.getElementById('password').onkeyup = (e) => {
+        //         if(anyBlank.test(e.target.value)){
+        //             alert('비밀번호는 공백을 허용하지 않습니다.');
+        //             document.getElementById('password').value = '';
+        //             document.getElementById('password').focus();
+        //             return;
+        //         }   
+        //     }
+            
+        //     //비밀번호 유효성 검사(크기제한)
+        //     document.getElementById('password').oninput = (e) => {
+        //         if(anyBlank.test(e.target.value)){
+        //         alert('비밀번호는 공백을 허용하지 않습니다.!');
+        //         document.getElementById('password').value = '';
+        //         document.getElementById('password').focus();
+        //         return;
+        //         } 
+
+        //         if(e.target.value.length > 12){
+        //             $password.value = $password.value.slice(0,12);
+        //             document.getElementById('password').focus();
+        //             alert('비밀번호는 12자를 초과할 수 없습니다.')
+        //             return;
+        //         }
+
+
+        //         if(e.target.value.includes('개새끼')) {
+        //             alert('비밀번호는 비속어를 허용하지 않습니다.')
+        //             document.getElementById('password').value = '';
+        //             document.getElementById('password').focus();
+        //             return;
+        //         }
+        //     }
+        
+            document.getElementById('modify').onclick = () => {
+                const passwordPattern = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,12}$/;
+                const password = document.getElementById('password').value;
+
+                if(password === ''){
+                    alert('비밀번호는 필수 입력값입니다.');
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
+                    return;
+                }
+                
+                // if(password.trim() === ''){
+                //     alert('비밀번호는 공백을 허용하지 않습니다.');
+                //     document.getElementById('password').value = '';
+                //     document.getElementById('password').focus();
+                //     return;
+                // }
+                
+                // if(!englishPattern.test(password)) {
+                //     alert('비밀번호에 영문이 포함되어 있지 않습니다.');
+                //     document.getElementById('password').value = '';
+                //     document.getElementById('password').focus();
+                //     return;
+                // } 
+
+                // if(!numberPattern.test(password)) {
+                //     alert('비밀번호에 숫자가 포함되어 있지 않습니다.');
+                //     document.getElementById('password').value = '';
+                //     document.getElementById('password').focus();
+                //     return;
+                // } 
+
+                // if(!specialPattern.test(password)) {
+                //     alert('비밀번호에 특수문자가 포함되어 있지 않습니다.');
+                //     document.getElementById('password').value = '';
+                //     document.getElementById('password').focus();
+                //     return;
+                // } 
+
+                // if(password.length < 6 || password.length > 12){
+                //     alert('비밀번호의 글자수가 유효하지 않습니다.');
+                //     document.getElementById('password').value = '';
+                //     document.getElementById('password').focus();
+                //     return;
+                // }
+
+                document.modForm.submit();
+            }
 
             document.getElementById('replyRegist').onclick = () => {
                 console.log('댓글 등록 이벤트가 발생함!');
@@ -131,7 +265,7 @@
                 const replyPw = document.getElementById('replyPw').value;
 
                 if(reply === '' || replyId === '' || replyPw === ''){
-                    alert('이름, 비밀번호, 내용은 필수값 입니다.');
+                    alert('이름, 비밀번호, 내용은 필수 입력값 입니다.');
                     return;
                 }
 
@@ -430,18 +564,7 @@
                 return time;
 
             }
-
-
-
-
-
-
-
-
-
-
-
-
+	
         }; //window.onload
 
     </script>

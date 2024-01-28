@@ -10,8 +10,9 @@ import lombok.ToString;
 public class FreeModifyRequestDTO {
 	
 	private int bno;
-	private String writer;
 	private String title;
+	private String writer;
 	private String content;
+	private String password;
 
 }

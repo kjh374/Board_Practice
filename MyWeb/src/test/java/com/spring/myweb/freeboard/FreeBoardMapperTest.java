@@ -40,7 +40,6 @@ public class FreeBoardMapperTest {
 			//when: 테스트 실제 상황 세팅
 			mapper.regist(FreeBoard.builder()
 					.title("페이징 테스트 제목 " + i)
-					.writer("page1234")
 					.content("테스트 내용입니다. " + i)
 					.build());
 			
@@ -48,7 +47,6 @@ public class FreeBoardMapperTest {
 		
 //		mapper.regist(FreeBoard.builder()
 //				.title("메롱메롱")
-//				.writer("kim1234")
 //				.content("테스트 중이니까 조용히 하세요!")
 //				.build());
 		
@@ -84,7 +82,6 @@ public class FreeBoardMapperTest {
 		FreeBoard board = mapper.getContent(bno);
 		
 		//then
-		assertEquals(board.getWriter(), "abc1234");
 		assertTrue(board.getTitle().equals("메롱메롱"));
 		
 		

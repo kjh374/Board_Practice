@@ -14,7 +14,8 @@ import lombok.ToString;
 public class FreeRegistRequestDTO {
 
 	private String title;
-	private String content;
 	private String writer;
+	private String content;
+	private String password;
 	
 }

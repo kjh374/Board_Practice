@@ -15,12 +15,11 @@
 		<if test="condition == 'title'">
 			WHERE title LIKE '%' || #{keyword} || '%' 
 		</if>
-		
+		<if test="condition == 'writer'">
+			WHERE writer LIKE '%' || #{keyword} || '%'
+		</if>
 		<if test="condition == 'content'">
 			WHERE content LIKE '%' || #{keyword} || '%' 
-		</if>
-		<if test="condition == 'writer'">
-			WHERE writer LIKE '%' || #{keyword} || '%' 
 		</if>
 		<if test="condition == 'titleContent'">
 			WHERE title LIKE '%' || #{keyword} || '%' 
@@ -32,24 +31,27 @@
 
 	<insert id="regist">
 		INSERT INTO freeboard
-		(bno, title, writer, content)
-		VALUES (freeboard_seq.NEXTVAL, #{title}, #{writer}, #{content})
+		(bno, title, writer, content, password)
+		VALUES (freeboard_seq.NEXTVAL, #{title}, #{writer}, #{content}, #{password})
 	</insert>
 
 	<select id="getList" resultType="freeboard">
 		SELECT *
 		FROM
-			(SELECT ROWNUM AS rn, tbl.*
+			(SELECT 
+				ROWNUM AS rn2,
+				tbl2.*
 			FROM
-				(SELECT * FROM freeboard
+				(SELECT ROWNUM AS rn,  tbl.bno, tbl.title, tbl.writer, tbl.content, tbl.reg_date, tbl.update_date FROM freeboard tbl
 				<include refid="search" />
-				ORDER BY bno DESC) tbl)
+				ORDER BY rn DESC) tbl2)
 		<!-- CDATA: Character Data의 약자로, 마크업 언어에서 문자열 데이터를 표기하기 위한 문법입니다.
 			특수 문자 등을 순수한 문자로 표기하고 싶을 때 사용하는 태그입니다. -->
 		<![CDATA[
-		WHERE rn > #{pageStart} 
-		AND rn <= #{pageEnd}
+		WHERE rn2 > #{pageStart} 
+		AND rn2 <= #{pageEnd}
 		]]>
+		ORDER BY rn DESC
 	</select>
 	
 	<select id="getTotal" resultType="int">
@@ -61,10 +63,15 @@
 		SELECT * FROM freeboard
 		WHERE bno = #{bno}
 	</select>
+	
+	<select id="getPassword" resultType="String">
+		SELECT password FROM freeboard
+		WHERE bno = #{bno}
+	</select>
 
 	<update id="update">
 		UPDATE freeboard 
-		SET title = #{title}, content = #{content}, update_date = sysdate
+		SET title = #{title}, writer = #{writer}, content = #{content}, update_date = sysdate
 		WHERE bno = #{bno}
 	</update>
 

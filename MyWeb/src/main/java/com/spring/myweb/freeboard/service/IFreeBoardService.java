@@ -29,5 +29,7 @@ public interface IFreeBoardService {
 		
 		//삭제
 		void delete(int bno);
+
+		boolean authenticate(FreeModifyRequestDTO dto);
 		
 }

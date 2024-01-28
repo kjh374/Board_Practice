@@ -15,6 +15,7 @@ import lombok.Getter;
 public class FreeListResponseDTO {
 
 	private int bno;
+	private int rn;
 	private String title;
 	private String writer;
 	private String date;
@@ -22,6 +23,7 @@ public class FreeListResponseDTO {
 	public FreeListResponseDTO(FreeBoard board) {
 		super();
 		this.bno = board.getBno();
+		this.rn = board.getRn();
 		this.title = board.getTitle();
 		this.writer = board.getWriter();
 		this.date = makePrettierDateString(board.getRegDate());

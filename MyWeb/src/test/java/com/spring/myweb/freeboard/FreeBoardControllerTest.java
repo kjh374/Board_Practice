@@ -75,7 +75,6 @@ public class FreeBoardControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post("/freeboard/freeRegist")
 											  .param("title", "테스트 새 글 제목")
 											  .param("content", "테스트 새 글 내용")
-											  .param("writer", "user01")
 					  ).andReturn().getModelAndView().getViewName();
 		
 		assertEquals(viewName, "redirect:/freeboard/freeList");
@@ -86,7 +85,7 @@ public class FreeBoardControllerTest {
 	@DisplayName("3번 글 상세보기 요청을 넣으면 컨트롤러는 DB에서 가지고 온 글 객체를 model에 담아 freeDetail.jsp로 이동시킬 것이다.")
 	void testContent() throws Exception {
 		// /freeboard/content -> get
-		// bno, title, writer, content, updateDate == null ? regDate, updateDate(수정됨)
+		// bno, title, content, updateDate == null ? regDate, updateDate(수정됨)
 		ModelAndView mv =
 		mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/content")
 												.param("bno", "3")

@@ -322,12 +322,13 @@ section {
 
 /*제목에 클래스를 줘서 강제로 크기 고정*/
 .board-title {
-	width: 300px;
+	width: 970px;
 }
 /*th의 순차적 접근 색상변경 */
 .table-bordered>thead>tr>th {
 	background-color: #E7F2F9;
 	color: #003366;
+	text-align: center;
 }
 
 /*테이블 안에 a태그에 순차적 접근 */
@@ -365,7 +366,7 @@ section {
 
 /*input 요소의 넓이만 선택*/
 .t-control input {
-	width: 200px;
+	width: 500px;
 	display: inline; /*인라인요소로 변경한다*/
 }
 
@@ -373,6 +374,7 @@ section {
 .t-control .input-sm {
 	height: auto;
 	line-height: normal;
+	width: 500px;
 }
 /*td의 아래만 밑줄*/
 .t-control td {

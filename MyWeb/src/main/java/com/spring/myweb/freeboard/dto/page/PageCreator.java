@@ -10,7 +10,7 @@ public class PageCreator {
 	private static final int BUTTON_NUM = 5;
 	
 	//화면 렌더링 시 페이지의 시작값과 끝값.
-	private int begin, end;
+	private int begin, end, first, last;
 	
 	//이전, 다음 버튼 활성화 여부
 	private boolean prev, next;
@@ -38,11 +38,17 @@ public class PageCreator {
 		//		this.prev = (begin == 1) ? false : true;
 		this.prev = begin > 1;
 		
-		this.next = articleTotalCount <= (end*page.getAmount()) ? false : true;
+		this.next = articleTotalCount > (end*page.getAmount()) ? true : false;
 		
 		if(!next) {
 			this.end = (int) Math.ceil(articleTotalCount/ (double)page.getAmount()); 
 		}
+		
+		//처음 페이지 계산
+		this.first = 1;
+		
+		//마지막 페이지 계산
+		this.last = (int) Math.ceil(articleTotalCount/ (double)page.getAmount());
 	}
 	
 }

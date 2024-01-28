@@ -47,35 +47,34 @@
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
+                                	<c:if test="${login == null}">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">로그인
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                    	<c:if test="${login == null}">
 	                                        <li><a href="${pageContext.request.contextPath}/user/userJoin"><span class="glyphicon glyphicon-user"></span>Join</a></li>
 	                                        <li><a href="${pageContext.request.contextPath}/user/userLogin"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
                              			</c:if>
-                             			<c:if test="${login != null}">          
+                             			<c:if test="${login != null}"> 
+                             			 <a class="dropdown-toggle" data-toggle="dropdown" href="#">로그아웃
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">         
 	                                        <li><a href="${pageContext.request.contextPath}/user/userMypage"><span class="glyphicon glyphicon-user"></span>MyPage</a></li>
-	                                        <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+	                                        <li><a href="${pageContext.request.contextPath}/logout" onclick="location.href='/'"><span class="glyphicon glyphicon-log-out" ></span>Logout</a></li>
                                    		</c:if>
                                     </ul>
                                 </li>
                             </ul>
-
-                            <form class="navbar-form navbar-right" action="">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <div class="input-group-btn">
-
-                                        <button class="btn btn-primary" type="submit">
-                                           	 검색
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+    
+    <script type="text/javascript">
+    	
+    	function logout() {
+    		session
+    	}
+    	
+    </script>
