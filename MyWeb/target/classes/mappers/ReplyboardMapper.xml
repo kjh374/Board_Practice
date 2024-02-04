@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.spring.myweb.replyboard.mapper.IReplyboardMapper">
+
+	<insert id="regist">
+		INSERT INTO replyboard
+		(bno, parent_no, title, writer, content, password)
+		VALUES
+		(replyboard_seq.NEXTVAL, replyboard_seq.NEXTVAL, #{title}, #{writer}, #{content},
+		#{password})
+	</insert>
+
+	<insert id="replyRegist">
+		INSERT INTO replyboard
+		(bno, parent_no, group_order, board_level, title, writer, content, password)
+		VALUES
+		(replyboard_seq.NEXTVAL, ${parentNo}, #{groupOrder}, #{boardLevel}, #{title}, #{writer}, #{content},
+		#{password})
+	</insert>
+
+	<select id="getList" resultType="replyboard">
+		SELECT *
+		FROM
+		(SELECT ROWNUM AS rn, tbl2.*
+		FROM
+			(SELECT ROWNUM AS rno, tbl.*
+			FROM
+				(SELECT *
+				FROM replyboard 
+				ORDER BY parent_no, group_order DESC, board_level DESC) tbl
+			ORDER BY rno DESC
+			) tbl2
+		)
+		<![CDATA[
+		WHERE rn >= #{pageStart}
+		AND rn <= #{pageEnd}
+		]]>
+	</select>
+
+	<select id="getContent" resultType="replyboard">
+		SELECT * FROM replyboard
+		WHERE bno = #{bno}
+	</select>
+
+	<select id="getPw" resultType="String">
+		SELECT password FROM replyboard
+		WHERE bno = #{bno}
+	</select>
+
+	<update id="updateGroupOrder">
+		UPDATE replyboard SET group_order = group_order + 1
+		WHERE parent_no = #{parentNo} AND group_order >= #{groupOrder}
+	</update>
+
+</mapper>

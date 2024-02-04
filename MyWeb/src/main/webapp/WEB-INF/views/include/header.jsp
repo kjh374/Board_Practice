@@ -38,6 +38,7 @@
                             <ul class="nav navbar-nav">
                                 <li class="active"><a href="<c:url value='/' />">Main</a></li>
                                 <li><a href="${pageContext.request.contextPath}/freeboard/freeList">자유게시판</a></li>
+                                <li><a href="${pageContext.request.contextPath}/replyboard/list">답변형 게시판</a></li>
 								<li><a href="${pageContext.request.contextPath}/snsboard/snsList">SNS</a></li>
                                 <!-- 
                                 <li><a href="#">Form</a></li>
