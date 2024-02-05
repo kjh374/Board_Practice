@@ -31,5 +31,5 @@ public interface IFreeBoardService {
 		void delete(int bno);
 
 		boolean authenticate(FreeModifyRequestDTO dto);
-		
+
 }

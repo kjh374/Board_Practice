@@ -9,9 +9,10 @@ import com.spring.myweb.freeboard.entity.FreeBoard;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 // 클라이언트 측으로 게시글 목록을 줄 때의 스펙 정의.
-@Getter @ToString @EqualsAndHashCode
+@Getter @Setter @ToString @EqualsAndHashCode
 public class FreeListResponseDTO {
 
 	private int bno;
@@ -20,6 +21,8 @@ public class FreeListResponseDTO {
 	private String writer;
 	private String date;
 	
+	private int count;
+	
 	public FreeListResponseDTO(FreeBoard board) {
 		super();
 		this.bno = board.getBno();
@@ -27,6 +30,7 @@ public class FreeListResponseDTO {
 		this.title = board.getTitle();
 		this.writer = board.getWriter();
 		this.date = makePrettierDateString(board.getRegDate());
+		this.count = board.getRCount();
 	}	
 	
 	static String makePrettierDateString(LocalDateTime regDate) {

@@ -31,8 +31,8 @@
 
 	<insert id="regist">
 		INSERT INTO freeboard
-		(bno, title, writer, content, password)
-		VALUES (freeboard_seq.NEXTVAL, #{title}, #{writer}, #{content}, #{password})
+		(bno, group_no, title, writer, content, password)
+		VALUES (freeboard_seq.NEXTVAL, #{groupNo}, #{title}, #{writer}, #{content}, #{password})
 	</insert>
 
 	<select id="getList" resultType="freeboard">
@@ -80,6 +80,10 @@
 		WHERE bno = #{bno}
 	</delete>
 
+	<update id="updateGroupOrder">
+		UPDATE freeboard SET group_order = group_order + 1
+		WHERE group_no = #{groupNo} AND group_order >= #{groupOrder}
+	</update>
 	
 
 

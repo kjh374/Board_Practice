@@ -27,4 +27,5 @@ public interface IFreeBoardMapper {
 
 	//비밀번호 조회
 	String getPassword(int bno);
+
 }

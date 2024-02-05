@@ -68,7 +68,10 @@
                         	<c:forEach var="vo" items="${boardList}">
 	                            <tr>
 	                                <td>${vo.rn}</td>
-	                                <td><a href="${pageContext.request.contextPath}/freeboard/content?bno=${vo.bno}&pageNo=${pc.page.pageNo}&amount=${pc.page.amount}&keyword=${pc.page.keyword}&condition=${pc.page.condition}"><c:out value="${vo.title}"></c:out></a></td>
+	                                <td><a href="${pageContext.request.contextPath}/freeboard/content?bno=${vo.bno}&pageNo=${pc.page.pageNo}&amount=${pc.page.amount}&keyword=${pc.page.keyword}&condition=${pc.page.condition}"><c:out value="${vo.title}"></c:out></a>
+	                                <c:if test="${vo.count != 0}">
+	                                	<span>(${vo.count})</span></td>
+	                                </c:if>
 	                                <td><c:out value="${vo.writer}"></c:out></td>
 	                                <td>${vo.date}</td>
 	                            </tr>

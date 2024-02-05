@@ -14,6 +14,7 @@ import com.spring.myweb.freeboard.dto.response.FreeContentResponseDTO;
 import com.spring.myweb.freeboard.dto.response.FreeListResponseDTO;
 import com.spring.myweb.freeboard.entity.FreeBoard;
 import com.spring.myweb.freeboard.mapper.IFreeBoardMapper;
+import com.spring.myweb.reply.mapper.IReplyMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class FreeBoardService implements IFreeBoardService {
 
 	private final IFreeBoardMapper mapper;
+	private final IReplyMapper rMapper;
 	private final BCryptPasswordEncoder encoder;
 	
 	@Override
@@ -39,12 +41,14 @@ public class FreeBoardService implements IFreeBoardService {
 		List<FreeListResponseDTO> dtoList = new ArrayList<FreeListResponseDTO>();
 		List<FreeBoard> list = mapper.getList(page);
 		for(FreeBoard board : list) {
+			board.setRCount(rMapper.getTotal(board.getBno()));
+			System.out.println("rCount: " + board.getRCount());
 			dtoList.add(new FreeListResponseDTO(board));
 		}
 		
 		return dtoList;
 	}
-
+	
 	@Override
 	public int getTotal(Page page) {
 		return mapper.getTotal(page);
@@ -75,5 +79,6 @@ public class FreeBoardService implements IFreeBoardService {
 		}
 		return false;
 	}
+
 
 }
